@@ -3,6 +3,9 @@ from utils.reproducibility import set_seed, get_device
 from tokenizer.bpe import get_tokenizer, validate_tokenizer
 from data.loader import load_raw_text, encode_corpus
 from data.dataset import GPT2Dataset, build_dataloader
+from model.gpt2 import GPT2Model
+from training.trainer import Trainer
+
 
 def main():
     config = GPT2Config()
@@ -21,7 +24,12 @@ def main():
     print(f"Dataset: {len(dataset)} chunks")
     print(f"Tokens per batch: {config.batch_size * config.context_length:,}")
 
-    # Model, training loop — added in later steps
+    model = GPT2Model(config)
+    print(f"Model parameters: {model.num_parameters():,}")
+
+    trainer = Trainer(model, config, loader)
+    trainer.train()
+
 
 if __name__ == "__main__":
     main()
